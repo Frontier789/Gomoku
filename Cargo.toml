@@ -1,0 +1,10 @@
+[package]
+name = "gomoku"
+version = "1.0.0"
+
+[dependencies]
+glui = { path = "../glui" }
+glui_proc = { path = "../glui_proc" }
+rand = "*"
+serde_json = "*"
+chrono = "*"
