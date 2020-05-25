@@ -21,7 +21,7 @@ pub struct GameData {
     pub board: Board,
     pub state: GameState,
     pub intelligence: (PlayerInt, PlayerInt),
-    pub saved_id: usize,
+    pub save_id: usize,
 }
 
 impl GuiBuilder for GameData {
@@ -34,7 +34,7 @@ impl GuiBuilder for GameData {
                 self.game_gui(GameResult::NotFinished);
             }
             GameState::LoadSaved => {
-                self.load_saved_gui(self.saved_id);
+                self.load_saved_gui(self.save_id);
             }
             GameState::Finished(r) => {
                 self.game_gui(r);
@@ -79,7 +79,7 @@ impl GameData {
                                     Vec4::WHITE.with_w(0.4),
                                     Vec4::WHITE.with_w(0.25),
                                 ),
-                                callback: self.make_callback1(|data| data.saved_id -= 1),
+                                callback: self.make_callback1(|data| data.save_id -= 1),
                                 ..Default::default()
                             };
                         };
@@ -103,7 +103,7 @@ impl GameData {
                                     Vec4::WHITE.with_w(0.4),
                                     Vec4::WHITE.with_w(0.2),
                                 ),
-                                callback: self.make_callback1(|data| data.saved_id += 1),
+                                callback: self.make_callback1(|data| data.save_id += 1),
                                 ..Default::default()
                             };
                         };
@@ -124,7 +124,7 @@ impl GameData {
                         self.make_callback1(move |data| {
                             data.state = GameState::Playing;
                             data.board = board.clone();
-                            ai_new_game(&data.board);
+                            ai_new_game(data.board.moves());
                         }),
                         0.5,
                     );
@@ -175,7 +175,7 @@ impl GameData {
         };
 
         -GridLayout {
-            row_heights: vec![0.1, 0.15, 0.15, 0.55, 0.15, 0.15, 0.15],
+            row_heights: vec![0.1, 0.15, 0.15, 0.15, 0.4, 0.15, 0.15, 0.15],
             ..Default::default()
         } << {
             -Overlay::from(Vec4::WHITE.with_w(0.6))
@@ -193,7 +193,19 @@ impl GameData {
                     }),
                     0.5,
                 );
+                self.button(
+                    "undo all",
+                    self.make_callback1(|data| {
+                        for _ in 0..data.board.moves().len() {
+                            data.board.undo();
+                            ai_undo();
+                        }
+                        data.state = GameState::Playing;
+                    }),
+                    0.5,
+                );
             } else {
+                -Padding::default();
                 -Padding::default();
             }
 
@@ -224,7 +236,7 @@ impl GameData {
                         if data.intelligence.0 == PlayerInt::AI
                             || data.intelligence.1 == PlayerInt::AI
                         {
-                            ai_new_game(&data.board);
+                            ai_new_game(data.board.moves());
                             if !data.human_comes() {
                                 ai_move(&mut data.board);
                             }
@@ -283,7 +295,7 @@ impl GameData {
                         if data.intelligence.0 == PlayerInt::AI
                             || data.intelligence.1 == PlayerInt::AI
                         {
-                            ai_new_game(&data.board);
+                            ai_new_game(data.board.moves());
                             if !data.human_comes() {
                                 ai_move(&mut data.board);
                             }

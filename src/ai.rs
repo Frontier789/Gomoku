@@ -1,6 +1,7 @@
 extern crate glui;
 extern crate glui_proc;
 extern crate rand;
+extern crate serde_json;
 use rand::seq::SliceRandom;
 use rand::thread_rng;
 use std::cell::RefCell;
@@ -28,7 +29,29 @@ thread_local! {
     static AIDATA_INSTANCE: RefCell<AiData> = RefCell::new(AiData::new());
 }
 
-pub fn ai_new_game(board: &Board) {
+pub fn ai_eval(moves: &str, my_turn: bool) -> serde_json::Result<Vec<f32>> {
+    let moves: Vec<(usize, usize)> = serde_json::from_str(moves)?;
+
+    ai_new_game(&vec![]);
+
+    let mut evals = vec![];
+
+    AIDATA_INSTANCE.with(|ai_data_pers| {
+        let mut ai_data = ai_data_pers.borrow_mut();
+
+        for p in moves {
+            ai_data.white_board.put(p.0, p.1);
+            ai_data.black_board.put(p.0, p.1);
+            let Move { value, .. } =
+                alphabeta(&mut ai_data, my_turn, 0.51, 3, std::f32::MIN, std::f32::MAX);
+            evals.push(value);
+        }
+    });
+
+    Ok(evals)
+}
+
+pub fn ai_new_game(moves: &Vec<(usize, usize)>) {
     AIDATA_INSTANCE.with(|ai_data_pers| {
         let mut ai_data = ai_data_pers.borrow_mut();
 
@@ -38,7 +61,7 @@ pub fn ai_new_game(board: &Board) {
             ai_data.black_board.undo();
         }
 
-        for p in board.moves() {
+        for p in moves {
             ai_data.white_board.put(p.0, p.1);
             ai_data.black_board.put(p.0, p.1);
         }
