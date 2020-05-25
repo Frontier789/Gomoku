@@ -8,4 +8,5 @@ Gomoku game with AI written in Rust
 
 ## Acknowledgement
 Game created by Mátyás Komáromi
+
 Graphics by Réka Fülöpp
