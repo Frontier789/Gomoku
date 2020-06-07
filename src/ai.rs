@@ -8,7 +8,7 @@ use std::cell::RefCell;
 use std::collections::HashMap;
 // use tools::*;
 
-use board::*;
+use super::board::*;
 use std::cmp::*;
 
 struct AiData {

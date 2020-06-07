@@ -1,6 +1,8 @@
 [package]
 name = "gomoku"
 version = "1.0.0"
+authors = ["Frontier789 <fr0nt13r789@gmail.com>"]
+edition = "2018"
 
 [dependencies]
 glui = { path = "../glui" }

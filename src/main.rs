@@ -11,7 +11,6 @@ mod ai;
 mod board;
 mod gamestate;
 mod ui;
-use board::*;
 use gamestate::*;
 use ui::*;
 
@@ -56,7 +55,7 @@ fn main() {
         let _ = write!(file, "OpenGL version: {}", rt.gl_verison);
     };
 
-    let mut gui = GuiContext::new(
+    let gui = GuiContext::new(
         rt,
         true,
         GameData {
@@ -66,7 +65,6 @@ fn main() {
             save_id: 0,
         },
     );
-    gui.rebuild_gui();
     let id = w.add_system(gui);
     w.make_system_ui_aware(id);
     w.run();

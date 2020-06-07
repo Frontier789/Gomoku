@@ -4,7 +4,7 @@ extern crate glui_proc;
 extern crate rand;
 extern crate serde_json;
 use self::chrono::{Datelike, Timelike};
-use gamestate::PlayerInt;
+use super::gamestate::PlayerInt;
 use std::collections::HashMap;
 use std::fs::OpenOptions;
 use std::io::Write;

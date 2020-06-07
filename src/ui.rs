@@ -5,9 +5,9 @@ extern crate rand;
 use std::ops::Neg;
 use std::ops::Shl;
 
-use ai::*;
-use board::*;
-use gamestate::{GameState, PlayerInt};
+use super::ai::*;
+use super::board::*;
+use super::gamestate::{GameState, PlayerInt};
 use glui::gui::*;
 use glui::impl_widget_building_for;
 use glui::mecs::*;
@@ -47,7 +47,7 @@ impl GuiBuilder for GameData {
 impl GameData {
     fn load_saved_gui(&self, mut id: usize) {
         -GridLayout {
-            row_heights: vec![0.9, 0.1],
+            row_heights: GuiDimension::relative_array(vec![0.9, 0.1]),
             ..Default::default()
         } << {
             let mut lines: Vec<String> = Default::default();
@@ -67,7 +67,7 @@ impl GameData {
 
                 board.load_from_string(&lines[2 * id + 1]);
                 -GridLayout {
-                    col_widths: vec![0.2, 1.0, 0.2],
+                    col_widths: GuiDimension::relative_array(vec![0.2, 1.0, 0.2]),
                     ..Default::default()
                 } << {
                     -Padding::ratios(0.0, 0.1, 0.3, 0.2)
@@ -84,7 +84,7 @@ impl GameData {
                             };
                         };
                     -GridLayout {
-                        row_heights: vec![0.1, 1.0],
+                        row_heights: GuiDimension::relative_array(vec![0.1, 1.0]),
                         ..Default::default()
                     } << {
                         -Text {
@@ -109,7 +109,7 @@ impl GameData {
                         };
                 };
                 -GridLayout {
-                    col_widths: vec![0.5, 0.5],
+                    col_widths: GuiDimension::relative_array(vec![0.5, 0.5]),
                     ..Default::default()
                 } << {
                     self.button(
@@ -175,7 +175,9 @@ impl GameData {
         };
 
         -GridLayout {
-            row_heights: vec![0.1, 0.15, 0.15, 0.15, 0.4, 0.15, 0.15, 0.15],
+            row_heights: GuiDimension::relative_array(vec![
+                0.1, 0.15, 0.15, 0.15, 0.4, 0.15, 0.15, 0.15,
+            ]),
             ..Default::default()
         } << {
             -Overlay::from(Vec4::WHITE.with_w(0.6))
@@ -283,7 +285,7 @@ impl GameData {
             << -Padding::relative_x(1.0 / 5.0)
             << -Overlay::from(Vec4::WHITE.with_w(0.2))
             << -GridLayout {
-                row_heights: vec![0.5, 0.5, 1.0, 1.0],
+                row_heights: GuiDimension::relative_array(vec![0.5, 0.5, 1.0, 1.0]),
                 ..Default::default()
             }
             << {
@@ -311,7 +313,7 @@ impl GameData {
                     0.8,
                 );
                 -GridLayout {
-                    col_widths: vec![1.0, 1.0],
+                    col_widths: GuiDimension::relative_array(vec![1.0, 1.0]),
                     ..Default::default()
                 } << {
                     -Overlay::from(Vec4::WHITE.with_w(0.5))
@@ -374,8 +376,8 @@ impl GameData {
                 << -Image::from("images/board")
                 << -Padding::relative(1.0 / 32.0)
                 << -GridLayout {
-                    col_widths: vec![1.0; MAP_SIZE],
-                    row_heights: vec![1.0; MAP_SIZE],
+                    col_widths: GuiDimension::relative_array(vec![1.0; MAP_SIZE]),
+                    row_heights: GuiDimension::relative_array(vec![1.0; MAP_SIZE]),
                     ..Default::default()
                 }
                 << {

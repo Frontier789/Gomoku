@@ -2,7 +2,7 @@ extern crate glui;
 extern crate glui_proc;
 extern crate rand;
 
-use board::GameResult;
+use super::board::GameResult;
 
 #[derive(Debug, Copy, Clone, Eq, PartialEq)]
 pub enum PlayerInt {
