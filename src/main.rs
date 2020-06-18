@@ -3,7 +3,6 @@ extern crate glui;
 extern crate glui_proc;
 extern crate rand;
 
-use glui::gui::*;
 use glui::mecs::*;
 use glui::tools::*;
 
@@ -55,17 +54,11 @@ fn main() {
         let _ = write!(file, "OpenGL version: {}", rt.gl_verison);
     };
 
-    let gui = GuiContext::new(
-        rt,
-        true,
-        GameData {
-            board: Default::default(),
-            state: GameState::MainMenu,
-            intelligence: (PlayerInt::Human, PlayerInt::Human),
-            save_id: 0,
-        },
-    );
-    let id = w.add_system(gui);
-    w.make_system_ui_aware(id);
+    w.add_gui(GameData {
+        board: Default::default(),
+        state: GameState::MainMenu,
+        intelligence: (PlayerInt::Human, PlayerInt::Human),
+        save_id: 0,
+    });
     w.run();
 }

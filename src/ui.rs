@@ -285,7 +285,7 @@ impl GameData {
             << -Padding::relative_x(1.0 / 5.0)
             << -Overlay::from(Vec4::WHITE.with_w(0.2))
             << -GridLayout {
-                row_heights: GuiDimension::relative_array(vec![0.5, 0.5, 1.0, 1.0]),
+                row_heights: GuiDimension::relative_array(vec![0.5, 0.5, 1.0, 1.0, 0.2]),
                 ..Default::default()
             }
             << {
@@ -342,11 +342,15 @@ impl GameData {
                 };
                 self.button(
                     "Exit",
-                    self.make_callback3(|_data, _button, sender| {
-                        sender.send_root(message::EXIT);
+                    self.make_callback3(|_data, _button, world| {
+                        world.send_root(message::EXIT);
                     }),
                     0.8,
                 );
+                -LinearBar {
+                    background: ButtonBckg::Fill(Vec4::WHITE.with_w(0.5)),
+                    ..Default::default()
+                };
             };
     }
 
