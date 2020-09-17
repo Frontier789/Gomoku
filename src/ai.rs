@@ -29,6 +29,7 @@ thread_local! {
     static AIDATA_INSTANCE: RefCell<AiData> = RefCell::new(AiData::new());
 }
 
+#[allow(dead_code)]
 pub fn ai_eval(moves: &str, my_turn: bool) -> serde_json::Result<Vec<f32>> {
     let moves: Vec<(usize, usize)> = serde_json::from_str(moves)?;
 
